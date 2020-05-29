@@ -1,5 +1,4 @@
-﻿using NSonic.Impl.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace NSonic.Impl
 {

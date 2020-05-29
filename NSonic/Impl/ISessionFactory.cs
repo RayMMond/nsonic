@@ -1,6 +1,4 @@
-﻿using NSonic.Impl.Net;
-
-namespace NSonic.Impl
+﻿namespace NSonic.Impl
 {
     interface ISessionFactory
     {

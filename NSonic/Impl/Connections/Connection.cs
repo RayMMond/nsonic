@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace NSonic.Impl.Connections
 {
@@ -7,6 +10,9 @@ namespace NSonic.Impl.Connections
         private readonly ISessionFactory sessionFactory;
         internal readonly IDisposableClient client;
         private readonly Configuration configuration;
+        protected readonly ISession session;
+        protected readonly ActionBlock<Func<Task>> commandQueue;
+        protected readonly CancellationTokenSource source;
 
         protected Connection(ISessionFactory sessionFactory
             , IRequestWriter requestWriter
@@ -20,6 +26,17 @@ namespace NSonic.Impl.Connections
             this.configuration = configuration;
 
             this.client.Configure(this.configuration.WithMode(this.Mode));
+
+            this.session = this.sessionFactory.Create(this.client);
+
+            source = new CancellationTokenSource();
+
+            commandQueue = new ActionBlock<Func<Task>>(ExecuteCommand, new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = 1,
+                CancellationToken = source.Token,
+                EnsureOrdered = true
+            });
         }
 
         protected abstract ConnectionMode Mode { get; }
@@ -36,14 +53,24 @@ namespace NSonic.Impl.Connections
             await this.client.ConnectAsync();
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            this.client.Dispose();
+            if (disposing)
+            {
+                this.client?.Dispose();
+                this.session.Dispose();
+            }
         }
 
-        protected ISession CreateSession()
+        public void Dispose()
         {
-            return this.sessionFactory.Create(this.client);
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void ExecuteCommand(Func<Task> cmd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

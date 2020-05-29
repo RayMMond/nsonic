@@ -1,6 +1,5 @@
-﻿using NSonic.Impl.Net;
-using NSonic.Utils;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace NSonic.Impl.Connections
 {
@@ -20,34 +19,55 @@ namespace NSonic.Impl.Connections
 
         public string Info()
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<string>();
+
+            commandQueue.Post(() =>
             {
-                return this.RequestWriter.WriteResult(session, "INFO");
-            }
+                tsc.SetResult(this.RequestWriter.WriteResult(session, "INFO"));
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<string> InfoAsync()
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<string>();
+
+            await commandQueue.SendAsync(async () =>
             {
-                return await this.RequestWriter.WriteResultAsync(session, "INFO");
-            }
+                var result = await this.RequestWriter.WriteResultAsync(session, "INFO");
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public void Trigger(string action, string data = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<object>();
+
+            commandQueue.Post(() =>
             {
                 this.RequestWriter.WriteOk(session, "TRIGGER", action, data);
-            }
+                tsc.SetResult(null);
+                return Task.CompletedTask;
+            });
+
+            tsc.Task.Wait();
         }
 
         public async Task TriggerAsync(string action, string data = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<object>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 await this.RequestWriter.WriteOkAsync(session, "TRIGGER", action, data);
-            }
+                tsc.SetResult(null);
+            });
+
+            await tsc.Task;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using NSonic.Impl.Net;
 using System;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace NSonic.Impl.Connections
 {
@@ -20,107 +21,174 @@ namespace NSonic.Impl.Connections
 
         public int Count(string collection, string bucket = null, string @object = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            commandQueue.Post(() =>
             {
                 var response = this.RequestWriter.WriteResult(session, "COUNT", collection, bucket, @object);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<int> CountAsync(string collection, string bucket = null, string @object = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var response = await this.RequestWriter.WriteResultAsync(session, "COUNT", collection, bucket, @object);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public int FlushBucket(string collection, string bucket)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            commandQueue.Post(() =>
             {
                 var response = this.RequestWriter.WriteResult(session, "FLUSHB", collection, bucket);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<int> FlushBucketAsync(string collection, string bucket)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHB", collection, bucket);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public int FlushCollection(string collection)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            commandQueue.Post(() =>
             {
                 var response = this.RequestWriter.WriteResult(session, "FLUSHC", collection);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<int> FlushCollectionAsync(string collection)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHC", collection);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public int FlushObject(string collection, string bucket, string @object)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            commandQueue.Post(() =>
             {
                 var response = this.RequestWriter.WriteResult(session, "FLUSHO", collection, bucket, @object);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<int> FlushObjectAsync(string collection, string bucket, string @object)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHO", collection, bucket, @object);
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public int Pop(string collection, string bucket, string @object, string text)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            commandQueue.Post(() =>
             {
                 var response = this.RequestWriter.WriteResult(session, "POP", collection, bucket, @object, $"\"{text}\"");
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+                return Task.CompletedTask;
+            });
+
+            return tsc.Task.Result;
         }
 
         public async Task<int> PopAsync(string collection, string bucket, string @object, string text)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<int>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var response = await this.RequestWriter.WriteResultAsync(session, "POP", collection, bucket, @object, $"\"{text}\"");
 
-                return Convert.ToInt32(response);
-            }
+                var result = Convert.ToInt32(response);
+
+                tsc.SetResult(result);
+            });
+
+            return await tsc.Task;
         }
 
         public void Push(string collection, string bucket, string @object, string text, string locale = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<object>();
+
+            commandQueue.Post(() =>
             {
                 var request = new PushRequest(text, locale);
 
@@ -131,13 +199,20 @@ namespace NSonic.Impl.Connections
                     , @object
                     , request.Text
                     , request.Locale
-                    );
-            }
+                );
+
+                tsc.SetResult(null);
+                return Task.CompletedTask;
+            });
+
+            tsc.Task.Wait();
         }
 
         public async Task PushAsync(string collection, string bucket, string @object, string text, string locale = null)
         {
-            using (var session = this.CreateSession())
+            var tsc = new TaskCompletionSource<object>();
+
+            await commandQueue.SendAsync(async () =>
             {
                 var request = new PushRequest(text, locale);
 
@@ -148,8 +223,12 @@ namespace NSonic.Impl.Connections
                     , @object
                     , request.Text
                     , request.Locale
-                    );
-            }
+                );
+
+                tsc.SetResult(null);
+            });
+
+            await tsc.Task;
         }
 
         class PushRequest
