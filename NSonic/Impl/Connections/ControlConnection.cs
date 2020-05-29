@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace NSonic.Impl.Connections
@@ -23,8 +24,16 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                tsc.SetResult(this.RequestWriter.WriteResult(session, "INFO"));
-                return Task.CompletedTask;
+                try
+                {
+                    tsc.SetResult(this.RequestWriter.WriteResult(session, "INFO"));
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -36,8 +45,15 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var result = await this.RequestWriter.WriteResultAsync(session, "INFO");
-                tsc.SetResult(result);
+                try
+                {
+                    var result = await this.RequestWriter.WriteResultAsync(session, "INFO");
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -49,9 +65,17 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                this.RequestWriter.WriteOk(session, "TRIGGER", action, data);
-                tsc.SetResult(null);
-                return Task.CompletedTask;
+                try
+                {
+                    this.RequestWriter.WriteOk(session, "TRIGGER", action, data);
+                    tsc.SetResult(null);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             tsc.Task.Wait();
@@ -63,8 +87,15 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                await this.RequestWriter.WriteOkAsync(session, "TRIGGER", action, data);
-                tsc.SetResult(null);
+                try
+                {
+                    await this.RequestWriter.WriteOkAsync(session, "TRIGGER", action, data);
+                    tsc.SetResult(null);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             await tsc.Task;

@@ -61,7 +61,7 @@ namespace NSonic.Impl.Connections
                 catch (Exception e)
                 {
                     tsc.SetException(e);
-                    throw;
+                    return Task.CompletedTask;
                 }
             });
 
@@ -104,7 +104,6 @@ namespace NSonic.Impl.Connections
                 catch (Exception e)
                 {
                     tsc.SetException(e);
-                    throw;
                 }
             });
 
@@ -148,7 +147,7 @@ namespace NSonic.Impl.Connections
                 catch (Exception e)
                 {
                     tsc.SetException(e);
-                    throw;
+                    return Task.CompletedTask;
                 }
             });
 
@@ -189,7 +188,6 @@ namespace NSonic.Impl.Connections
                 catch (Exception e)
                 {
                     tsc.SetException(e);
-                    throw;
                 }
             });
 

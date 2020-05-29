@@ -25,12 +25,20 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var response = this.RequestWriter.WriteResult(session, "COUNT", collection, bucket, @object);
+                try
+                {
+                    var response = this.RequestWriter.WriteResult(session, "COUNT", collection, bucket, @object);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
-                return Task.CompletedTask;
+                    tsc.SetResult(result);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -42,11 +50,18 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var response = await this.RequestWriter.WriteResultAsync(session, "COUNT", collection, bucket, @object);
+                try
+                {
+                    var response = await this.RequestWriter.WriteResultAsync(session, "COUNT", collection, bucket, @object);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -58,12 +73,20 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var response = this.RequestWriter.WriteResult(session, "FLUSHB", collection, bucket);
+                try
+                {
+                    var response = this.RequestWriter.WriteResult(session, "FLUSHB", collection, bucket);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
-                return Task.CompletedTask;
+                    tsc.SetResult(result);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -75,11 +98,18 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHB", collection, bucket);
+                try
+                {
+                    var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHB", collection, bucket);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -91,12 +121,20 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var response = this.RequestWriter.WriteResult(session, "FLUSHC", collection);
+                try
+                {
+                    var response = this.RequestWriter.WriteResult(session, "FLUSHC", collection);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
-                return Task.CompletedTask;
+                    tsc.SetResult(result);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -108,11 +146,18 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHC", collection);
+                try
+                {
+                    var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHC", collection);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -124,12 +169,20 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var response = this.RequestWriter.WriteResult(session, "FLUSHO", collection, bucket, @object);
+                try
+                {
+                    var response = this.RequestWriter.WriteResult(session, "FLUSHO", collection, bucket, @object);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
-                return Task.CompletedTask;
+                    tsc.SetResult(result);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -141,11 +194,18 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHO", collection, bucket, @object);
+                try
+                {
+                    var response = await this.RequestWriter.WriteResultAsync(session, "FLUSHO", collection, bucket, @object);
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -157,12 +217,20 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var response = this.RequestWriter.WriteResult(session, "POP", collection, bucket, @object, $"\"{text}\"");
+                try
+                {
+                    var response = this.RequestWriter.WriteResult(session, "POP", collection, bucket, @object, $"\"{text}\"");
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
-                return Task.CompletedTask;
+                    tsc.SetResult(result);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             return tsc.Task.Result;
@@ -174,11 +242,18 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var response = await this.RequestWriter.WriteResultAsync(session, "POP", collection, bucket, @object, $"\"{text}\"");
+                try
+                {
+                    var response = await this.RequestWriter.WriteResultAsync(session, "POP", collection, bucket, @object, $"\"{text}\"");
 
-                var result = Convert.ToInt32(response);
+                    var result = Convert.ToInt32(response);
 
-                tsc.SetResult(result);
+                    tsc.SetResult(result);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             return await tsc.Task;
@@ -190,19 +265,27 @@ namespace NSonic.Impl.Connections
 
             commandQueue.Post(() =>
             {
-                var request = new PushRequest(text, locale);
+                try
+                {
+                    var request = new PushRequest(text, locale);
 
-                this.RequestWriter.WriteOk(session
-                    , "PUSH"
-                    , collection
-                    , bucket
-                    , @object
-                    , request.Text
-                    , request.Locale
-                );
+                    this.RequestWriter.WriteOk(session
+                        , "PUSH"
+                        , collection
+                        , bucket
+                        , @object
+                        , request.Text
+                        , request.Locale
+                    );
 
-                tsc.SetResult(null);
-                return Task.CompletedTask;
+                    tsc.SetResult(null);
+                    return Task.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                    return Task.CompletedTask;
+                }
             });
 
             tsc.Task.Wait();
@@ -214,18 +297,25 @@ namespace NSonic.Impl.Connections
 
             await commandQueue.SendAsync(async () =>
             {
-                var request = new PushRequest(text, locale);
+                try
+                {
+                    var request = new PushRequest(text, locale);
 
-                await this.RequestWriter.WriteOkAsync(session
-                    , "PUSH"
-                    , collection
-                    , bucket
-                    , @object
-                    , request.Text
-                    , request.Locale
-                );
+                    await this.RequestWriter.WriteOkAsync(session
+                        , "PUSH"
+                        , collection
+                        , bucket
+                        , @object
+                        , request.Text
+                        , request.Locale
+                    );
 
-                tsc.SetResult(null);
+                    tsc.SetResult(null);
+                }
+                catch (Exception e)
+                {
+                    tsc.SetException(e);
+                }
             });
 
             await tsc.Task;

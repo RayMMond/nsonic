@@ -57,6 +57,9 @@ namespace NSonic.Impl.Connections
         {
             if (disposing)
             {
+                commandQueue.Complete();
+                source.Cancel();
+
                 this.client?.Dispose();
                 this.session.Dispose();
             }
@@ -68,9 +71,9 @@ namespace NSonic.Impl.Connections
             GC.SuppressFinalize(this);
         }
 
-        private void ExecuteCommand(Func<Task> cmd)
+        private async Task ExecuteCommand(Func<Task> cmd)
         {
-            throw new NotImplementedException();
+            await cmd();
         }
     }
 }

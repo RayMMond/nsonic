@@ -40,36 +40,23 @@ namespace NSonic.Tests.Stubs
 
             this.TcpClient.Setup(tc => tc.Dispose());
 
-            this.PreConnectSession = new Mock<ISession>(MockBehavior.Strict);
-            this.PreConnectSession.Setup(pcs => pcs.Dispose());
+            this.ConnectSession = new Mock<ISession>(MockBehavior.Strict);
+            this.ConnectSession.Setup(pcs => pcs.Dispose());
 
-            this.PreConnectSession
+            this.ConnectSession
                 .SetupRead(sequence, async, "CONNECTED <sonic-server v1.00>")
                 .SetupWrite(sequence, async, "START", mode.ToString().ToLowerInvariant(), StubConstants.Secret)
                 .SetupRead(sequence, async, "STARTED control protocol(1) buffer(20002)")
                 ;
-
-            this.PostConnectSession = new Mock<ISession>(MockBehavior.Strict);
-            this.PostConnectSession.Setup(pcs => pcs.Dispose());
         }
 
         public SemaphoreSlim Semaphore { get; }
         public Mock<ITcpClient> TcpClient { get; }
-        public Mock<ISession> PreConnectSession { get; }
-        public Mock<ISession> PostConnectSession { get; }
+        public Mock<ISession> ConnectSession { get; }
 
         public ISession Create(IClient tcpClient)
         {
-            if (tcpClient.Environment.Equals(EnvironmentResponse.Default))
-            {
-                return this.PreConnectSession.Object;
-            }
-            else if (tcpClient.Environment.Equals(StubConstants.ConnectedEnvironment))
-            {
-                return this.PostConnectSession.Object;
-            }
-
-            throw new AssertFailedException("Invalid environment provided");
+            return this.ConnectSession.Object;
         }
     }
 }

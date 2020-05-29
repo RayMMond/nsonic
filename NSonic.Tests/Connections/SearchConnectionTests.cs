@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSonic.Impl;
 using NSonic.Impl.Connections;
 using NSonic.Tests.Stubs;
@@ -98,7 +99,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Query_ShouldThrowAssertionExceptionIfPendingResponseIsInvalid()
         {
             // Arrange
@@ -124,7 +125,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Query_ShouldThrowAssertionExceptionIfEventResponseIsOfInvalidType()
         {
             // Arrange
@@ -150,7 +151,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Query_ShouldThrowAssertionExceptionIfEventResponseIsForTheWrongMarker()
         {
             // Arrange
@@ -238,7 +239,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Suggest_ShouldThrowAssertionExceptionIfPendingResponseIsInvalid()
         {
             // Arrange
@@ -263,7 +264,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Suggest_ShouldThrowAssertionExceptionIfEventResponseIsOfInvalidType()
         {
             // Arrange
@@ -289,7 +290,7 @@ namespace NSonic.Tests.Connections
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public async Task Suggest_ShouldThrowAssertoinExceptionIfEventResponseIsForTheWrongMarker()
         {
             // Arrange

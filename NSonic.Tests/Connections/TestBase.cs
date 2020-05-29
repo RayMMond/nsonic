@@ -12,7 +12,7 @@ namespace NSonic.Tests.Connections
         internal StubSessionFactory SessionFactory { get; private set; }
         internal IDisposableClient Client { get; private set; }
 
-        internal Mock<ISession> Session => this.SessionFactory.PostConnectSession;
+        internal Mock<ISession> Session => this.SessionFactory.ConnectSession;
 
         internal abstract ConnectionMode Mode { get; }
         protected abstract bool Async { get; }
