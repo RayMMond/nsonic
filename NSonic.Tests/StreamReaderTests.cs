@@ -96,9 +96,9 @@ namespace NSonic.Tests
 
                     if (delay)
                     {
-                        Thread.Sleep(500); //this will lead to timeout
+                        Thread.Sleep(500);  //this will lead to timeout
                     }
-                    
+
                     writer.WriteLine("EVENT QUERY Bt2m2gYa conversation:71f3d63b");
                 }
             }
